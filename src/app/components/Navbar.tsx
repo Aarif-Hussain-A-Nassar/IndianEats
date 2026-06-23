@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { LogoFull, LogoMark } from "./BrandLogos";
+import { useState, useEffect, useRef } from "react";
+import { LogoMark } from "./BrandLogos";
 
 interface CartItem {
   name: string;
@@ -11,11 +11,11 @@ interface CartItem {
 }
 
 const navLinks = [
-  { label: "Home", href: "#hero" },
-  { label: "Manifesto", href: "#features" },
-  { label: "Spice Lab", href: "#spices" },
-  { label: "Recipes", href: "#recipes" },
-  { label: "Our Story", href: "#about" },
+  { label: "Home", href: "#hero", emoji: "🏠" },
+  { label: "Manifesto", href: "#features", emoji: "📜" },
+  { label: "Spice Lab", href: "#spices", emoji: "🧪" },
+  { label: "Recipes", href: "#recipes", emoji: "🍲" },
+  { label: "Our Story", href: "#about", emoji: "✨" },
 ];
 
 export default function Navbar() {
@@ -24,24 +24,32 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [activeLink, setActiveLink] = useState("Home");
+  const searchRef = useRef<HTMLInputElement>(null);
 
-  // Monitor scroll state to adjust background opacity
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 30);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Simple listener for cart updates from our Spice Lab / Recipe sections
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
   useEffect(() => {
     const checkCart = () => {
       const items = JSON.parse(localStorage.getItem("cart") || "[]");
       setCartCount(items.length);
     };
     checkCart();
-    // Check every 1s or on storage event
     window.addEventListener("storage", checkCart);
     const interval = setInterval(checkCart, 1000);
     return () => {
@@ -49,6 +57,12 @@ export default function Navbar() {
       clearInterval(interval);
     };
   }, []);
+
+  useEffect(() => {
+    if (searchOpen && searchRef.current) {
+      setTimeout(() => searchRef.current?.focus(), 100);
+    }
+  }, [searchOpen]);
 
   const getCartItems = (): CartItem[] => {
     if (typeof window !== "undefined") {
@@ -61,7 +75,6 @@ export default function Navbar() {
     const items = getCartItems();
     items.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(items));
-    // Dispatch storage event to trigger update
     window.dispatchEvent(new Event("storage"));
   };
 
@@ -70,172 +83,458 @@ export default function Navbar() {
     window.dispatchEvent(new Event("storage"));
   };
 
+  const handleNavClick = (label: string) => {
+    setActiveLink(label);
+    setMenuOpen(false);
+  };
+
   const cartItems = getCartItems();
   const cartTotal = cartItems.reduce((acc: number, item: CartItem) => acc + (item.price || 12.99), 0);
 
   return (
     <>
+      {/* ── Main Navbar ── */}
       <header
+        className="navbar-root"
         style={{
           position: "fixed",
-          top: scrolled ? "12px" : "20px",
+          top: scrolled ? "10px" : "16px",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "calc(100% - 32px)",
-          maxWidth: "1200px",
+          width: "calc(100% - 24px)",
+          maxWidth: "1180px",
           zIndex: 100,
-          borderRadius: scrolled ? "var(--radius-full)" : "20px",
-          transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-          backgroundColor: scrolled ? "rgba(254, 244, 185, 0.88)" : "rgba(254, 244, 185, 0.72)",
-          backdropFilter: "blur(16px) saturate(120%)",
-          border: scrolled ? "1px solid var(--border)" : "1px solid rgba(233, 222, 157, 0.4)",
-          boxShadow: scrolled ? "var(--shadow-md)" : "var(--shadow-sm)",
+          transition: "top 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s ease",
         }}
       >
-        <div className="max-w-7xl mx-auto px-6 py-2.5 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" aria-label="Indian Eats Home" className="hover:scale-102 transition-transform">
-            <LogoFull logoSize={30} color="var(--terracotta)" />
-          </Link>
-
-          {/* Desktop Nav links with smooth scrolling */}
-          <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                style={{ color: "var(--brown-dark)", fontSize: "0.75rem", letterSpacing: "0.15em" }}
-                className="font-bold uppercase relative py-1 hover:text-[var(--terracotta)] transition-colors group"
+        <div
+          style={{
+            backgroundColor: scrolled ? "rgba(22, 10, 3, 0.92)" : "rgba(30, 14, 5, 0.82)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+            border: "1px solid rgba(248, 158, 0, 0.18)",
+            borderRadius: scrolled ? "50px" : "24px",
+            boxShadow: scrolled
+              ? "0 8px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(246,99,30,0.08), inset 0 1px 0 rgba(255,255,255,0.06)"
+              : "0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)",
+            transition: "all 0.4s cubic-bezier(0.4,0,0.2,1)",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0 20px",
+              height: "60px",
+            }}
+          >
+            {/* Logo */}
+            <Link
+              href="/"
+              aria-label="Indian Eats Home"
+              style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", flexShrink: 0 }}
+              className="nav-logo-link"
+            >
+              <div
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "10px",
+                  background: "linear-gradient(135deg, var(--terracotta), var(--gold))",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 2px 12px rgba(246,99,30,0.4)",
+                  flexShrink: 0,
+                }}
               >
-                {link.label}
-                <span
+                <LogoMark size={22} color="#fff" />
+              </div>
+              <div style={{ lineHeight: 1.1 }}>
+                <p
                   style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: "50%",
-                    transform: "translateX(-50%) scaleX(0)",
-                    width: "4px",
-                    height: "4px",
-                    borderRadius: "50%",
-                    backgroundColor: "var(--terracotta)",
-                    transition: "transform 0.25s ease",
-                  }}
-                  className="group-hover:transform group-hover:translateX(-50%) group-hover:scaleX(1)"
-                />
-              </a>
-            ))}
-          </nav>
-
-          {/* Right Action Icons */}
-          <div className="flex items-center gap-4">
-            {/* Search Trigger */}
-            <button
-              onClick={() => setSearchOpen(true)}
-              aria-label="Search Spices"
-              style={{ color: "var(--brown-dark)" }}
-              className="hover:text-[var(--terracotta)] transition-colors cursor-pointer p-1.5"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" className="w-4.5 h-4.5">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </button>
-
-            {/* Cart Trigger */}
-            <button
-              onClick={() => setCartOpen(true)}
-              aria-label="Open Cart"
-              style={{ color: "var(--brown-dark)", position: "relative" }}
-              className="hover:text-[var(--terracotta)] transition-colors cursor-pointer p-1.5"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" className="w-4.5 h-4.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-              </svg>
-              {cartCount > 0 && (
-                <span
-                  style={{
-                    position: "absolute",
-                    top: "-2px",
-                    right: "-2px",
-                    backgroundColor: "var(--terracotta)",
-                    color: "var(--cream)",
-                    fontSize: "0.62rem",
+                    fontFamily: "var(--font-playfair)",
+                    fontSize: "0.95rem",
                     fontWeight: 800,
-                    width: "16px",
-                    height: "16px",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: "var(--shadow-sm)",
+                    color: "#ffffff",
+                    letterSpacing: "0.04em",
+                    lineHeight: 1,
                   }}
-                  className="animate-pulse"
                 >
-                  {cartCount}
-                </span>
-              )}
-            </button>
+                  INDIAN
+                </p>
+                <p
+                  style={{
+                    fontFamily: "var(--font-playfair)",
+                    fontSize: "0.7rem",
+                    fontWeight: 700,
+                    color: "var(--gold)",
+                    letterSpacing: "0.18em",
+                    lineHeight: 1,
+                  }}
+                >
+                  EATS
+                </p>
+              </div>
+            </Link>
 
-            {/* Mobile Hamburger menu */}
-            <button
-              className="md:hidden flex flex-col gap-1.5 p-1.5 cursor-pointer"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle Navigation"
-              aria-expanded={menuOpen}
-              style={{ color: "var(--terracotta)" }}
+            {/* Desktop Nav */}
+            <nav
+              className="nav-desktop"
+              aria-label="Main navigation"
+              style={{ display: "flex", alignItems: "center", gap: "4px" }}
             >
-              <span
-                className={`block w-5 h-0.5 transition-transform duration-300 ${menuOpen ? "rotate-45 translate-y-1.5" : ""}`}
-                style={{ backgroundColor: "var(--terracotta)" }}
-              />
-              <span
-                className={`block w-5 h-0.5 transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`}
-                style={{ backgroundColor: "var(--terracotta)" }}
-              />
-              <span
-                className={`block w-5 h-0.5 transition-transform duration-300 ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""}`}
-                style={{ backgroundColor: "var(--terracotta)" }}
-              />
-            </button>
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => handleNavClick(link.label)}
+                  style={{
+                    position: "relative",
+                    padding: "7px 14px",
+                    borderRadius: "50px",
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    textDecoration: "none",
+                    color: activeLink === link.label ? "#fff" : "rgba(255,255,255,0.6)",
+                    backgroundColor: activeLink === link.label ? "rgba(246,99,30,0.25)" : "transparent",
+                    border: activeLink === link.label ? "1px solid rgba(246,99,30,0.4)" : "1px solid transparent",
+                    transition: "all 0.2s ease",
+                  }}
+                  className="nav-link-item"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+
+            {/* Right Icons */}
+            <div style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
+              {/* Search */}
+              <button
+                onClick={() => setSearchOpen(true)}
+                aria-label="Search"
+                className="nav-icon-btn"
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "50%",
+                  border: "none",
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  color: "rgba(255,255,255,0.7)",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </button>
+
+              {/* Cart */}
+              <button
+                onClick={() => setCartOpen(true)}
+                aria-label="Cart"
+                className="nav-icon-btn"
+                style={{
+                  position: "relative",
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "50%",
+                  border: "none",
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  color: "rgba(255,255,255,0.7)",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
+                </svg>
+                {cartCount > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "4px",
+                      right: "4px",
+                      backgroundColor: "var(--terracotta)",
+                      color: "#fff",
+                      fontSize: "0.58rem",
+                      fontWeight: 900,
+                      width: "14px",
+                      height: "14px",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      border: "1.5px solid rgba(22,10,3,0.9)",
+                    }}
+                  >
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+
+              {/* CTA Button (Desktop only) */}
+              <a
+                href="#spices"
+                className="nav-cta-btn"
+                style={{
+                  marginLeft: "6px",
+                  padding: "9px 18px",
+                  background: "linear-gradient(135deg, var(--terracotta) 0%, var(--gold) 100%)",
+                  color: "#fff",
+                  borderRadius: "50px",
+                  fontSize: "0.7rem",
+                  fontWeight: 800,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  boxShadow: "0 2px 12px rgba(246,99,30,0.4)",
+                  transition: "all 0.2s ease",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Order Now
+              </a>
+
+              {/* Hamburger (Mobile only) */}
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Toggle menu"
+                aria-expanded={menuOpen}
+                className="nav-hamburger"
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "50%",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  backgroundColor: menuOpen ? "rgba(246,99,30,0.2)" : "rgba(255,255,255,0.06)",
+                  color: "#fff",
+                  cursor: "pointer",
+                  display: "none",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "4.5px",
+                  transition: "all 0.2s ease",
+                }}
+              >
+                <span
+                  style={{
+                    display: "block",
+                    width: "16px",
+                    height: "1.5px",
+                    backgroundColor: "#fff",
+                    borderRadius: "2px",
+                    transition: "all 0.3s ease",
+                    transform: menuOpen ? "rotate(45deg) translate(4px, 4px)" : "none",
+                  }}
+                />
+                <span
+                  style={{
+                    display: "block",
+                    width: "16px",
+                    height: "1.5px",
+                    backgroundColor: "#fff",
+                    borderRadius: "2px",
+                    transition: "all 0.3s ease",
+                    opacity: menuOpen ? 0 : 1,
+                  }}
+                />
+                <span
+                  style={{
+                    display: "block",
+                    width: "16px",
+                    height: "1.5px",
+                    backgroundColor: "#fff",
+                    borderRadius: "2px",
+                    transition: "all 0.3s ease",
+                    transform: menuOpen ? "rotate(-45deg) translate(4px, -4px)" : "none",
+                  }}
+                />
+              </button>
+            </div>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Menu Panel */}
-        {menuOpen && (
-          <nav
-            style={{
-              borderTop: "1px solid var(--border)",
-              borderBottomLeftRadius: "20px",
-              borderBottomRightRadius: "20px",
-              backgroundColor: "rgba(254, 244, 185, 0.96)",
-              overflow: "hidden",
-            }}
-            className="md:hidden flex flex-col items-center gap-5 py-6 px-4 animate-fade-in"
-            aria-label="Mobile Navigation"
-          >
-            {navLinks.map((link) => (
+      {/* ── Full-Screen Mobile Menu Overlay ── */}
+      {menuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 99,
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "rgba(16, 7, 2, 0.97)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            padding: "100px 32px 48px",
+            overflowY: "auto",
+          }}
+          className="mobile-menu-overlay"
+          onClick={(e) => { if (e.target === e.currentTarget) setMenuOpen(false); }}
+        >
+          {/* Background Glow */}
+          <div style={{
+            position: "absolute",
+            top: "20%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+            width: "300px",
+            height: "300px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(246,99,30,0.12) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
+
+          {/* Nav Items */}
+          <nav style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
+            {navLinks.map((link, i) => (
               <a
                 key={link.label}
                 href={link.href}
-                style={{ color: "var(--brown-dark)", fontSize: "0.78rem", letterSpacing: "0.15em" }}
-                className="font-bold uppercase hover:text-[var(--terracotta)] transition-colors py-1"
-                onClick={() => setMenuOpen(false)}
+                onClick={() => handleNavClick(link.label)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  padding: "18px 20px",
+                  borderRadius: "16px",
+                  textDecoration: "none",
+                  color: activeLink === link.label ? "#fff" : "rgba(255,255,255,0.55)",
+                  backgroundColor: activeLink === link.label ? "rgba(246,99,30,0.18)" : "rgba(255,255,255,0.03)",
+                  border: activeLink === link.label ? "1px solid rgba(246,99,30,0.3)" : "1px solid rgba(255,255,255,0.06)",
+                  transition: "all 0.2s ease",
+                  animationDelay: `${i * 0.06}s`,
+                }}
+                className="mobile-nav-item"
               >
-                {link.label}
+                <span style={{ fontSize: "1.4rem", lineHeight: 1 }}>{link.emoji}</span>
+                <span style={{
+                  fontFamily: "var(--font-playfair)",
+                  fontSize: "1.5rem",
+                  fontWeight: 700,
+                  letterSpacing: "-0.01em",
+                }}>
+                  {link.label}
+                </span>
+                <svg
+                  style={{ marginLeft: "auto", opacity: 0.4 }}
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
+                </svg>
               </a>
             ))}
           </nav>
-        )}
-      </header>
 
-      {/* ── Slide-Out Cart Drawer ── */}
+          {/* Mobile Bottom CTA */}
+          <div style={{ marginTop: "32px", display: "flex", flexDirection: "column", gap: "12px" }}>
+            <a
+              href="#spices"
+              onClick={() => setMenuOpen(false)}
+              style={{
+                display: "block",
+                textAlign: "center",
+                padding: "16px",
+                background: "linear-gradient(135deg, var(--terracotta), var(--gold))",
+                color: "#fff",
+                borderRadius: "16px",
+                fontWeight: 800,
+                fontSize: "0.9rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                boxShadow: "0 4px 24px rgba(246,99,30,0.35)",
+              }}
+            >
+              Build Your Blend →
+            </a>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button
+                onClick={() => { setMenuOpen(false); setSearchOpen(true); }}
+                style={{
+                  flex: 1,
+                  padding: "14px",
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "14px",
+                  color: "rgba(255,255,255,0.7)",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                }}
+              >
+                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                Search
+              </button>
+              <button
+                onClick={() => { setMenuOpen(false); setCartOpen(true); }}
+                style={{
+                  flex: 1,
+                  padding: "14px",
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "14px",
+                  color: "rgba(255,255,255,0.7)",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  position: "relative",
+                }}
+              >
+                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
+                </svg>
+                Bag {cartCount > 0 && `(${cartCount})`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Cart Drawer ── */}
       {cartOpen && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            backgroundColor: "rgba(44, 20, 5, 0.4)",
-            backdropFilter: "blur(4px)",
+            backgroundColor: "rgba(16, 7, 2, 0.6)",
+            backdropFilter: "blur(8px)",
             zIndex: 200,
             display: "flex",
             justifyContent: "flex-end",
@@ -247,48 +546,75 @@ export default function Navbar() {
               width: "100%",
               maxWidth: "420px",
               height: "100%",
-              backgroundColor: "var(--cream)",
-              boxShadow: "var(--shadow-lg)",
-              borderLeft: "1px solid var(--border)",
+              backgroundColor: "#130800",
+              border: "1px solid rgba(248,158,0,0.15)",
+              borderLeft: "none",
               display: "flex",
               flexDirection: "column",
-              padding: "24px",
+              padding: "28px 24px",
+              boxShadow: "-20px 0 60px rgba(0,0,0,0.4)",
             }}
             onClick={(e) => e.stopPropagation()}
-            className="animate-slide-in"
+            className="cart-drawer-animate"
           >
-            {/* Drawer Header */}
-            <div className="flex items-center justify-between border-b pb-4 mb-4" style={{ borderColor: "var(--border)" }}>
-              <div className="flex items-center gap-2">
-                <LogoMark size={28} color="var(--terracotta)" />
-                <h2 style={{ fontFamily: "var(--font-playfair)", fontSize: "1.45rem", fontWeight: 800, color: "var(--brown-dark)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "8px",
+                  background: "linear-gradient(135deg, var(--terracotta), var(--gold))",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}>
+                  <LogoMark size={18} color="#fff" />
+                </div>
+                <h2 style={{ fontFamily: "var(--font-playfair)", fontSize: "1.3rem", fontWeight: 800, color: "#fff" }}>
                   Your Spice Bag
                 </h2>
               </div>
               <button
                 onClick={() => setCartOpen(false)}
-                style={{ color: "var(--brown-dark)" }}
-                className="text-xl font-bold cursor-pointer hover:text-[var(--terracotta)] p-1"
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  color: "rgba(255,255,255,0.6)",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.85rem",
+                }}
               >
                 ✕
               </button>
             </div>
 
-            {/* Drawer Body (Items) */}
-            <div className="flex-1 overflow-y-auto py-2" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: "10px" }}>
               {cartItems.length === 0 ? (
-                <div className="text-center py-12 flex flex-col items-center gap-4">
+                <div style={{ textAlign: "center", padding: "48px 0", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
                   <span style={{ fontSize: "3rem" }}>🫙</span>
-                  <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", fontWeight: 600 }}>
-                    Your spice bag is empty.<br />Head to the Spice Lab to create your blend!
+                  <p style={{ color: "rgba(255,255,255,0.45)", fontSize: "0.88rem", lineHeight: 1.6 }}>
+                    Your spice bag is empty.<br />Visit the Spice Lab to build your blend!
                   </p>
                   <button
-                    onClick={() => {
-                      setCartOpen(false);
-                      window.location.hash = "#spices";
+                    onClick={() => { setCartOpen(false); window.location.hash = "#spices"; }}
+                    style={{
+                      padding: "12px 24px",
+                      background: "linear-gradient(135deg, var(--terracotta), var(--gold))",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "50px",
+                      fontSize: "0.75rem",
+                      fontWeight: 800,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      cursor: "pointer",
                     }}
-                    className="btn-primary"
-                    style={{ fontSize: "0.7rem", padding: "10px 20px" }}
                   >
                     Open Spice Lab
                   </button>
@@ -298,33 +624,37 @@ export default function Navbar() {
                   <div
                     key={idx}
                     style={{
-                      backgroundColor: "var(--card-bg)",
-                      border: "1px solid var(--border)",
-                      borderRadius: "var(--radius-md)",
-                      padding: "12px 16px",
+                      backgroundColor: "rgba(255,255,255,0.04)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      borderRadius: "14px",
+                      padding: "14px 16px",
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
                       gap: "12px",
-                      boxShadow: "var(--shadow-sm)",
                     }}
                   >
-                    <div style={{ flex: 1 }}>
-                      <p style={{ fontWeight: 800, color: "var(--brown-dark)", fontSize: "0.88rem" }}>{item.name}</p>
-                      <p style={{ fontSize: "0.72rem", color: "var(--text-secondary)", marginTop: "2px" }}>
-                        {item.type || "Custom Craft Blend"}
-                      </p>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ fontWeight: 700, color: "#fff", fontSize: "0.85rem", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{item.name}</p>
+                      <p style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.4)", marginTop: "2px" }}>{item.type || "Custom Blend"}</p>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <span style={{ fontWeight: 700, color: "var(--terracotta)", fontSize: "0.85rem" }}>
-                        ${(item.price || 12.99).toFixed(2)}
-                      </span>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", flexShrink: 0 }}>
+                      <span style={{ fontWeight: 800, color: "var(--gold)", fontSize: "0.9rem" }}>${(item.price || 12.99).toFixed(2)}</span>
                       <button
                         onClick={() => removeFromCart(idx)}
-                        style={{ color: "var(--text-muted)" }}
-                        className="hover:text-[var(--terracotta)] cursor-pointer text-sm font-semibold"
+                        style={{
+                          color: "rgba(255,255,255,0.3)",
+                          fontSize: "0.7rem",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          border: "none",
+                          background: "none",
+                          padding: "4px",
+                          transition: "color 0.2s",
+                        }}
+                        className="cart-remove-btn"
                       >
-                        Remove
+                        ✕
                       </button>
                     </div>
                   </div>
@@ -332,49 +662,63 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Drawer Footer */}
             {cartItems.length > 0 && (
-              <div className="border-t pt-4 mt-4" style={{ borderColor: "var(--border)" }}>
-                <div className="flex items-center justify-between mb-4">
-                  <span style={{ fontWeight: 700, color: "var(--text-secondary)" }}>Est. Total</span>
-                  <span style={{ fontSize: "1.2rem", fontWeight: 800, color: "var(--terracotta)" }}>
-                    ${cartTotal.toFixed(2)}
-                  </span>
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "20px", marginTop: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+                  <span style={{ color: "rgba(255,255,255,0.5)", fontWeight: 600, fontSize: "0.85rem" }}>Est. Total</span>
+                  <span style={{ fontSize: "1.4rem", fontWeight: 800, color: "var(--gold)" }}>${cartTotal.toFixed(2)}</span>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <button
-                    onClick={() => {
-                      alert("Connecting to checkout gateway...");
-                      clearCart();
-                      setCartOpen(false);
-                    }}
-                    className="btn-primary w-full text-center"
-                    style={{ justifyContent: "center", paddingTop: "14px", paddingBottom: "14px" }}
-                  >
-                    Proceed to Checkout
-                  </button>
-                  <button
-                    onClick={clearCart}
-                    style={{ color: "var(--text-secondary)", fontSize: "0.75rem", fontWeight: 700 }}
-                    className="text-center hover:text-[var(--terracotta)] py-2 uppercase tracking-widest cursor-pointer"
-                  >
-                    Clear All
-                  </button>
-                </div>
+                <button
+                  onClick={() => { alert("Connecting to checkout..."); clearCart(); setCartOpen(false); }}
+                  style={{
+                    width: "100%",
+                    padding: "16px",
+                    background: "linear-gradient(135deg, var(--terracotta), var(--gold))",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "14px",
+                    fontSize: "0.82rem",
+                    fontWeight: 800,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 20px rgba(246,99,30,0.35)",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Proceed to Checkout →
+                </button>
+                <button
+                  onClick={clearCart}
+                  style={{
+                    width: "100%",
+                    padding: "12px",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    color: "rgba(255,255,255,0.3)",
+                    fontSize: "0.72rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    cursor: "pointer",
+                  }}
+                >
+                  Clear All
+                </button>
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* ── Slide-In Search Modal Overlay ── */}
+      {/* ── Search Modal ── */}
       {searchOpen && (
         <div
           style={{
             position: "fixed",
             inset: 0,
-            backgroundColor: "rgba(44, 20, 5, 0.8)",
-            backdropFilter: "blur(8px)",
+            backgroundColor: "rgba(16, 7, 2, 0.85)",
+            backdropFilter: "blur(12px)",
             zIndex: 250,
             display: "flex",
             alignItems: "center",
@@ -386,64 +730,158 @@ export default function Navbar() {
           <div
             style={{
               width: "100%",
-              maxWidth: "600px",
-              backgroundColor: "var(--cream)",
-              borderRadius: "var(--radius-lg)",
-              border: "2px solid var(--border)",
-              boxShadow: "var(--shadow-lg)",
+              maxWidth: "560px",
+              backgroundColor: "#1a0d04",
+              borderRadius: "24px",
+              border: "1px solid rgba(248,158,0,0.2)",
               padding: "32px",
+              boxShadow: "0 32px 80px rgba(0,0,0,0.5)",
             }}
             onClick={(e) => e.stopPropagation()}
+            className="search-modal-animate"
           >
-            <div className="flex items-center justify-between mb-6">
-              <h3 style={{ fontFamily: "var(--font-playfair)", fontSize: "1.4rem", fontWeight: 700, color: "var(--brown-dark)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+              <h3 style={{ fontFamily: "var(--font-playfair)", fontSize: "1.3rem", fontWeight: 700, color: "#fff" }}>
                 Search Spice Collections
               </h3>
               <button
                 onClick={() => setSearchOpen(false)}
-                style={{ color: "var(--text-secondary)" }}
-                className="font-bold text-xl cursor-pointer hover:text-[var(--terracotta)]"
+                style={{
+                  width: "30px",
+                  height: "30px",
+                  borderRadius: "50%",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  backgroundColor: "rgba(255,255,255,0.06)",
+                  color: "rgba(255,255,255,0.6)",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.8rem",
+                }}
               >
                 ✕
               </button>
             </div>
-            <div className="flex gap-3">
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                backgroundColor: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "14px",
+                padding: "4px 4px 4px 16px",
+              }}
+            >
+              <svg width="16" height="16" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2.2" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
               <input
-                autoFocus
+                ref={searchRef}
                 placeholder="e.g. Saffron, Cardamom, Biryani blend..."
                 style={{
                   flex: 1,
-                  padding: "12px 20px",
-                  borderRadius: "var(--radius-full)",
-                  border: "1px solid var(--border)",
+                  background: "none",
+                  border: "none",
                   outline: "none",
-                  fontSize: "1rem",
-                  backgroundColor: "var(--card-bg)",
-                  color: "var(--text-primary)",
+                  fontSize: "0.95rem",
+                  color: "#fff",
+                  padding: "10px 0",
                 }}
               />
               <button
-                onClick={() => {
-                  alert("Search results loading...");
-                  setSearchOpen(false);
+                onClick={() => { alert("Search results loading..."); setSearchOpen(false); }}
+                style={{
+                  padding: "10px 20px",
+                  background: "linear-gradient(135deg, var(--terracotta), var(--gold))",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "10px",
+                  fontSize: "0.78rem",
+                  fontWeight: 800,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  cursor: "pointer",
                 }}
-                className="btn-primary"
               >
                 Search
               </button>
             </div>
+            <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.3)", marginTop: "12px" }}>
+              Try: Turmeric, Cardamom, Saffron, Garam Masala, Kashmiri Chili…
+            </p>
           </div>
         </div>
       )}
 
-      {/* Inject slide-in animation styles directly */}
       <style>{`
-        @keyframes slideIn {
+        @media (max-width: 768px) {
+          .nav-desktop { display: none !important; }
+          .nav-cta-btn { display: none !important; }
+          .nav-hamburger { display: flex !important; }
+        }
+
+        .nav-link-item:hover {
+          color: #fff !important;
+          background-color: rgba(255,255,255,0.08) !important;
+          border-color: rgba(255,255,255,0.1) !important;
+        }
+
+        .nav-icon-btn:hover {
+          background-color: rgba(255,255,255,0.12) !important;
+          color: #fff !important;
+        }
+
+        .nav-cta-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 20px rgba(246,99,30,0.5) !important;
+        }
+
+        .nav-logo-link:hover > div:first-child {
+          box-shadow: 0 4px 20px rgba(246,99,30,0.6) !important;
+        }
+
+        @keyframes menuFadeIn {
+          from { opacity: 0; transform: translateY(-8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .mobile-menu-overlay {
+          animation: menuFadeIn 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
+
+        @keyframes mobileNavItemIn {
+          from { opacity: 0; transform: translateX(-20px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        .mobile-nav-item {
+          animation: mobileNavItemIn 0.35s cubic-bezier(0.16,1,0.3,1) both;
+        }
+        .mobile-nav-item:hover {
+          color: #fff !important;
+          background-color: rgba(246,99,30,0.12) !important;
+          border-color: rgba(246,99,30,0.25) !important;
+        }
+
+        @keyframes cartDrawerIn {
           from { transform: translateX(100%); }
           to { transform: translateX(0); }
         }
-        .animate-slide-in {
-          animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .cart-drawer-animate {
+          animation: cartDrawerIn 0.35s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
+
+        @keyframes searchModalIn {
+          from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .search-modal-animate {
+          animation: searchModalIn 0.25s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
+
+        .cart-remove-btn:hover {
+          color: var(--terracotta) !important;
         }
       `}</style>
     </>

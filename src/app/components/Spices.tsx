@@ -97,7 +97,7 @@ export default function Spices() {
 
         {/* ── PART 1: The Interactive Spice Lab ── */}
         <div
-          className="fade-up"
+          className="fade-up spice-lab-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1.1fr 1fr",
@@ -428,8 +428,11 @@ export default function Spices() {
           animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @media (max-width: 768px) {
-          #spices > .container > div:first-of-type {
+          .spice-lab-grid {
             grid-template-columns: 1fr !important;
+          }
+          #spices {
+            padding: 60px 0;
           }
         }
       `}</style>
