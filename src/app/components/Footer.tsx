@@ -1,19 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { LogoFull } from "./BrandLogos";
 
 const footerLinks = {
-  Explore: [
-    { label: "Recipes", href: "/recipes" },
-    { label: "Spices", href: "/spices" },
-    { label: "About Us", href: "/about" },
-    { label: "Blog", href: "/blog" },
+  "Spice Lab": [
+    { label: "Flavor Profiler", href: "#spices" },
+    { label: "Custom Blend Builder", href: "#spices" },
+    { label: "Single-Origin Jars", href: "#spices" },
   ],
-  "Quick Links": [
-    { label: "Contact", href: "/contact" },
-    { label: "FAQs", href: "/faqs" },
-    { label: "Shipping Policy", href: "/shipping" },
-    { label: "Privacy Policy", href: "/privacy" },
+  Manifesto: [
+    { label: "Purity Blueprint", href: "#features" },
+    { label: "Supply Chain Trace", href: "#about" },
+    { label: "Home Chef Recipes", href: "#recipes" },
   ],
 };
 
@@ -37,14 +36,14 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: "#2a1204", color: "var(--cream)" }}>
+    <footer style={{ backgroundColor: "var(--brown-dark)", color: "var(--cream)" }}>
       {/* Inject CSS-only hover styles */}
       <style>{`
-        .footer-link:hover { color: var(--cream) !important; }
+        .footer-link:hover { color: var(--gold) !important; }
         .footer-social:hover {
-          background-color: var(--accent) !important;
-          color: white !important;
-          border-color: var(--accent) !important;
+          background-color: var(--terracotta) !important;
+          color: var(--cream) !important;
+          border-color: var(--terracotta) !important;
         }
         @media (max-width: 768px) {
           .footer-grid { grid-template-columns: 1fr !important; }
@@ -67,28 +66,23 @@ export default function Footer() {
             <Link
               href="/"
               style={{
-                fontFamily: "var(--font-playfair)",
-                fontSize: "1.8rem",
-                fontWeight: 800,
-                color: "var(--cream)",
                 textDecoration: "none",
                 display: "inline-block",
-                marginBottom: "1.2rem",
+                marginBottom: "1.6rem",
               }}
             >
-              🍛 Indian Eats
+              <LogoFull layout="vertical" logoSize={44} color="var(--cream)" />
             </Link>
             <p
               style={{
                 fontSize: "0.9rem",
-                color: "rgba(245,234,216,0.6)",
+                color: "rgba(254,244,185,0.65)",
                 lineHeight: 1.8,
-                maxWidth: "300px",
+                maxWidth: "320px",
                 marginBottom: "1.6rem",
               }}
             >
-              Bringing the authentic flavours of India to your kitchen — from
-              hand-picked spices to time-honoured recipes.
+              Sourcing the highest grade single-origin craft spices from family-owned Indian growers, ground slowly in stone-mills and sealed fresh.
             </p>
 
             {/* Socials */}
@@ -103,12 +97,12 @@ export default function Footer() {
                     width: "38px",
                     height: "38px",
                     borderRadius: "50%",
-                    border: "1px solid rgba(245,234,216,0.18)",
+                    border: "1px solid rgba(254,244,185,0.2)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "rgba(245,234,216,0.7)",
-                    transition: "background var(--transition), color var(--transition), border-color var(--transition)",
+                    color: "rgba(254,244,185,0.7)",
+                    transition: "all var(--transition)",
                     textDecoration: "none",
                   }}
                 >
@@ -126,10 +120,10 @@ export default function Footer() {
               <h4
                 style={{
                   fontSize: "0.75rem",
-                  fontWeight: 700,
+                  fontWeight: 800,
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
-                  color: "var(--accent-light)",
+                  color: "var(--gold)",
                   marginBottom: "1.2rem",
                   fontFamily: "inherit",
                 }}
@@ -139,18 +133,18 @@ export default function Footer() {
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
                 {links.map((link) => (
                   <li key={link.label}>
-                    <Link
+                    <a
                       href={link.href}
                       className="footer-link"
                       style={{
                         fontSize: "0.88rem",
-                        color: "rgba(245,234,216,0.6)",
+                        color: "rgba(254,244,185,0.65)",
                         textDecoration: "none",
                         transition: "color var(--transition)",
                       }}
                     >
                       {link.label}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -161,7 +155,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div
           style={{
-            borderTop: "1px solid rgba(245,234,216,0.08)",
+            borderTop: "1px solid rgba(254,244,185,0.08)",
             paddingBlock: "24px",
             display: "flex",
             justifyContent: "space-between",
@@ -170,11 +164,11 @@ export default function Footer() {
             gap: "12px",
           }}
         >
-          <p style={{ fontSize: "0.8rem", color: "rgba(245,234,216,0.35)" }}>
+          <p style={{ fontSize: "0.8rem", color: "rgba(254,244,185,0.4)" }}>
             © {new Date().getFullYear()} Indian Eats. All rights reserved.
           </p>
-          <p style={{ fontSize: "0.8rem", color: "rgba(245,234,216,0.35)" }}>
-            Made with ❤️ for Indian food lovers worldwide
+          <p style={{ fontSize: "0.8rem", color: "rgba(254,244,185,0.4)" }}>
+            Made with ❤️ for culinary artisans worldwide
           </p>
         </div>
       </div>

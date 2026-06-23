@@ -1,92 +1,166 @@
 "use client";
 
+import { LogoMark } from "./BrandLogos";
+
 export default function Features() {
-  const features = [
+  const manifestos = [
     {
-      icon: "🌿",
-      title: "Farm-Fresh Spices",
-      desc: "Sourced directly from trusted farms across Kerala, Rajasthan, and Kashmir — hand-picked at peak aroma.",
+      metric: "0%",
+      accent: "Artificial Fillers",
+      title: "Pure Botanical Integrity",
+      desc: "Supermarket spices are often loaded with anti-caking agents, synthetic dyes, and flour fillers. Our spices are 100% pure, single-origin botanicals.",
     },
     {
-      icon: "👩‍🍳",
-      title: "Authentic Recipes",
-      desc: "Handed down through generations. Each recipe carries the soul of an Indian home kitchen.",
+      metric: "100%",
+      accent: "Direct Trade",
+      title: "Single-Estate Sourcing",
+      desc: "By bypassing multi-layered broker networks, we buy directly from family farms in Kerala, Rajasthan, and Kashmir, securing fair wages and pristine quality.",
     },
     {
-      icon: "📦",
-      title: "Delivered Fresh",
-      desc: "Order online and receive your spices in sealed, aroma-lock packaging within 3–5 days.",
+      metric: "Grade A",
+      accent: "Lab Certified",
+      title: "Scientific Purity Standards",
+      desc: "Every single import batch undergoes high-performance chromatography testing to certify volatile oil concentrations and zero pesticide residues.",
     },
     {
-      icon: "🔬",
-      title: "Purity Guaranteed",
-      desc: "Every batch is lab-tested and certified free from artificial additives, colours, and preservatives.",
+      metric: "Aroma Lock",
+      accent: "Sealed Fresh",
+      title: "Optimized Packaging Tech",
+      desc: "Packed within 48 hours of milling in tri-layer aluminum composite seals to block light, moisture, and oxygen, preserving maximum therapeutic oils.",
     },
   ];
 
   return (
     <section
       id="features"
-      style={{ backgroundColor: "var(--brown-dark)", padding: "clamp(50px,7vw,90px) 0" }}
+      style={{ backgroundColor: "var(--sage-dark)", padding: "clamp(60px,8vw,110px) 0", position: "relative", overflow: "hidden" }}
     >
-      <style>{`
-        .feature-item:hover { background-color: rgba(255,255,255,0.04); }
-      `}</style>
+      {/* Decorative background logo */}
+      <span
+        style={{
+          position: "absolute",
+          top: "-50px",
+          right: "-50px",
+          opacity: 0.03,
+          transform: "rotate(45deg)",
+          pointerEvents: "none",
+        }}
+      >
+        <LogoMark size={280} color="var(--cream)" />
+      </span>
+
       <div className="container">
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: "clamp(48px, 6vw, 80px)" }} className="fade-up">
+          <span
+            style={{
+              fontSize: "0.75rem",
+              fontWeight: 800,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "var(--gold)",
+            }}
+          >
+            The Indian Eats Standard
+          </span>
+          <h2
+            style={{
+              fontFamily: "var(--font-playfair), serif",
+              fontSize: "clamp(2.2rem, 4.5vw, 3.2rem)",
+              fontWeight: 800,
+              color: "var(--cream)",
+              marginTop: "8px",
+            }}
+          >
+            Our Purity Manifesto
+          </h2>
+          <div style={{ width: "60px", height: "4px", backgroundColor: "var(--gold)", margin: "16px auto 0", borderRadius: "var(--radius-full)" }} />
+        </div>
+
+        {/* Manifesto Grid */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "24px",
           }}
         >
-          {features.map((f, i) => (
+          {manifestos.map((m, i) => (
             <div
               key={i}
-              className={`feature-item fade-up fade-up-delay-${i}`}
+              className={`fade-up fade-up-delay-${i}`}
               style={{
-                padding: "clamp(24px, 3vw, 40px)",
-                textAlign: "center",
-                borderRight:
-                  i < features.length - 1
-                    ? "1px solid rgba(255,255,255,0.08)"
-                    : "none",
-                transition: "background var(--transition)",
+                backgroundColor: "rgba(254, 244, 185, 0.05)",
+                border: "1px solid rgba(254, 244, 185, 0.08)",
+                borderRadius: "var(--radius-lg)",
+                padding: "36px 30px",
+                transition: "all 0.3s ease",
+                display: "flex",
+                flexDirection: "column",
+                position: "relative",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(254, 244, 185, 0.08)";
+                e.currentTarget.style.borderColor = "rgba(254, 244, 185, 0.2)";
+                e.currentTarget.style.transform = "translateY(-6px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "rgba(254, 244, 185, 0.05)";
+                e.currentTarget.style.borderColor = "rgba(254, 244, 185, 0.08)";
+                e.currentTarget.style.transform = "none";
               }}
             >
-              <div
+              {/* Metric Callout */}
+              <p
                 style={{
-                  fontSize: "2.4rem",
-                  marginBottom: "1rem",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "64px",
-                  height: "64px",
-                  borderRadius: "50%",
-                  backgroundColor: "rgba(196,107,45,0.2)",
+                  fontFamily: "var(--font-playfair), serif",
+                  fontSize: "3.2rem",
+                  fontWeight: 800,
+                  color: "var(--gold)",
+                  lineHeight: 1,
+                  marginBottom: "4px",
                 }}
               >
-                {f.icon}
-              </div>
+                {m.metric}
+              </p>
+              
+              {/* Accent tag */}
+              <p
+                style={{
+                  fontSize: "0.68rem",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  color: "var(--cream)",
+                  marginBottom: "1.5rem",
+                  opacity: 0.9,
+                }}
+              >
+                {m.accent}
+              </p>
+
+              {/* Title */}
               <h3
                 style={{
                   fontFamily: "var(--font-playfair)",
-                  fontSize: "1.1rem",
+                  fontSize: "1.2rem",
                   fontWeight: 700,
-                  color: "#f5ead8",
-                  marginBottom: "0.6rem",
+                  color: "var(--cream)",
+                  marginBottom: "0.8rem",
                 }}
               >
-                {f.title}
+                {m.title}
               </h3>
+
+              {/* Description */}
               <p
                 style={{
-                  fontSize: "0.9rem",
-                  color: "rgba(245,234,216,0.65)",
+                  fontSize: "0.85rem",
+                  color: "rgba(254, 244, 185, 0.72)",
                   lineHeight: 1.7,
                 }}
               >
-                {f.desc}
+                {m.desc}
               </p>
             </div>
           ))}

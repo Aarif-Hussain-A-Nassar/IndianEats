@@ -2,28 +2,32 @@
 
 /* ── Design Tokens ── */
 :root {
-  --cream:        #f5ead8;
-  --cream-dark:   #ecdcc0;
-  --brown-dark:   #5c2d0e;
-  --brown-mid:    #7c3f1a;
-  --brown-light:  #a0522d;
-  --accent:       #c46b2d;
-  --accent-light: #e8956a;
-  --text-primary: #3b1a08;
-  --text-secondary: #7a5c42;
-  --text-muted:   #b09070;
+  --cream:        #FEF4B9;
+  --cream-dark:   #F4EAB1;
+  --terracotta:   #F6631E;
+  --gold:         #F89E00;
+  --sage:         #8EA394;
+  --sage-dark:    #4A5A4E;
+  --brown-dark:   #2C1405;
+  --brown-mid:    #4A2511;
+  --brown-light:  #6A371B;
+  --accent:       #F6631E;
+  --accent-light: #F98854;
+  --text-primary: #2C1405;
+  --text-secondary: #4A3525;
+  --text-muted:   #8EA394;
   --white:        #ffffff;
-  --card-bg:      #fdf6ec;
-  --border:       #dfc9a0;
+  --card-bg:      #FFFCEB;
+  --border:       #E9DE9D;
 
   --radius-sm:    6px;
   --radius-md:    14px;
   --radius-lg:    24px;
   --radius-full:  9999px;
 
-  --shadow-sm:    0 2px 8px rgba(92, 45, 14, 0.08);
-  --shadow-md:    0 8px 32px rgba(92, 45, 14, 0.12);
-  --shadow-lg:    0 20px 60px rgba(92, 45, 14, 0.18);
+  --shadow-sm:    0 2px 8px rgba(44, 20, 5, 0.06);
+  --shadow-md:    0 8px 32px rgba(44, 20, 5, 0.1);
+  --shadow-lg:    0 20px 60px rgba(44, 20, 5, 0.15);
 
   --transition:   0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -34,6 +38,10 @@
 @theme inline {
   --color-cream:          var(--cream);
   --color-cream-dark:     var(--cream-dark);
+  --color-terracotta:     var(--terracotta);
+  --color-gold:           var(--gold);
+  --color-sage:           var(--sage);
+  --color-sage-dark:      var(--sage-dark);
   --color-brown-dark:     var(--brown-dark);
   --color-brown-mid:      var(--brown-mid);
   --color-brown-light:    var(--brown-light);
@@ -112,7 +120,7 @@ h1, h2, h3, h4 {
   align-items: center;
   gap: 8px;
   padding: 14px 32px;
-  background-color: var(--brown-dark);
+  background-color: var(--terracotta);
   color: var(--cream);
   border-radius: var(--radius-full);
   font-size: 0.78rem;
@@ -125,7 +133,7 @@ h1, h2, h3, h4 {
   transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
 }
 .btn-primary:hover {
-  background-color: var(--brown-mid);
+  background-color: var(--brown-dark);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -187,3 +195,61 @@ h1, h2, h3, h4 {
 .fade-up-delay-2 { animation-delay: 0.2s; }
 .fade-up-delay-3 { animation-delay: 0.3s; }
 .fade-up-delay-4 { animation-delay: 0.4s; }
+
+/* ── Glow Blobs & Float Animations (Next-Gen Redesign) ── */
+@keyframes float {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  50%  { transform: translateY(-10px) rotate(1.5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float 9s ease-in-out infinite;
+}
+.animate-float-reverse {
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+@keyframes pulseGlow {
+  0%   { opacity: 0.55; transform: scale(1) translate(0px, 0px); }
+  33%  { opacity: 0.7; transform: scale(1.1) translate(30px, -20px); }
+  66%  { opacity: 0.5; transform: scale(0.9) translate(-20px, 20px); }
+  100% { opacity: 0.55; transform: scale(1) translate(0px, 0px); }
+}
+.animate-glow {
+  animation: pulseGlow 12s ease-in-out infinite;
+}
+.animate-glow-slow {
+  animation: pulseGlow 18s ease-in-out infinite;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(254, 244, 185, 0.72);
+  backdrop-filter: blur(16px) saturate(120%);
+  border: 1px solid rgba(233, 222, 157, 0.45);
+}
+
+.glass-panel-dark {
+  background: rgba(44, 20, 5, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(254, 244, 185, 0.15);
+}
+
+/* Next-gen custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--sage);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--terracotta);
+}
