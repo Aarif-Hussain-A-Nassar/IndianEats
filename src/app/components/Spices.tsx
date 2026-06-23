@@ -8,7 +8,7 @@ const signatureSpices = [
     name: "Pure Alleppey Turmeric",
     origin: "Kerala, India",
     desc: "Single-estate golden wonder. Lab-tested at 6.2% curcumin density (nearly double standard retail turmeric). Earthy, warm, and highly anti-inflammatory.",
-    price: 11.99,
+    price: 299,
     image: "/images/spice-turmeric.png",
     tag: "High Curcumin",
   },
@@ -16,7 +16,7 @@ const signatureSpices = [
     name: "Grade A Green Cardamom",
     origin: "Western Ghats",
     desc: "Hand-picked green pods with intense floral aroma. Hand-sorted by size (8.5mm pods) for premium oil concentration. Sweet, herbal warmth.",
-    price: 13.99,
+    price: 349,
     image: "/images/spice-cardamom.png",
     tag: "Aroma Grade",
   },
@@ -24,7 +24,7 @@ const signatureSpices = [
     name: "Kashmiri Mogra Saffron",
     origin: "Pampore, Kashmir",
     desc: "The world's most luxurious spice. 100% pure crimson threads, hand-harvested from crocus flowers. Intense floral aroma and golden coloring power.",
-    price: 24.99,
+    price: 649,
     image: "/images/spice-saffron.png",
     tag: "Premium Grade A+",
   },
@@ -74,7 +74,7 @@ export default function Spices() {
   const handleAddCustomBlend = () => {
     const name = getRecommendedBlendName();
     const specs = `Custom Blend (Heat: ${heat}%, Aroma: ${aroma}%, Floral: ${floral}%, Smoky: ${smoky}%)`;
-    addToCart(name, specs, 15.99);
+    addToCart(name, specs, 399);
   };
 
   return (
@@ -264,7 +264,7 @@ export default function Spices() {
               className="btn-primary w-full"
               style={{ marginTop: "12px", justifyContent: "center" }}
             >
-              Add Custom Blend to Bag — $15.99
+              Add Custom Blend to Bag — ₹399
             </button>
           </div>
         </div>
@@ -369,7 +369,7 @@ export default function Spices() {
 
                   <div className="flex justify-between items-center mt-auto pt-4 border-t" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
                     <span style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--terracotta)" }}>
-                      ${s.price.toFixed(2)}
+                      ₹{s.price}
                     </span>
                     <button
                       onClick={() => addToCart(s.name, "Single-Estate Spice Jar", s.price)}

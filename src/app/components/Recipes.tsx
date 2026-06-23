@@ -39,7 +39,7 @@ const recipesData: Recipe[] = [
       "Simmer canned tomatoes, cashews, and butter, then blend into a silky sauce.",
       "Add chicken back into the gravy with cream, honey, and crushed Kasuri Methi.",
     ],
-    spiceKitPrice: 12.99,
+    spiceKitPrice: 349,
   },
   {
     name: "Hyderabadi Dum Biryani",
@@ -63,7 +63,7 @@ const recipesData: Recipe[] = [
       "Layer the marinated meat at the bottom of a heavy pot, then cover with parboiled rice.",
       "Drizzle saffron-infused milk and ghee, seal the lid with wheat dough, and slow-cook (Dum) for 40 minutes.",
     ],
-    spiceKitPrice: 16.99,
+    spiceKitPrice: 449,
   },
   {
     name: "Smoky Tandoori Paneer Tikka",
@@ -87,7 +87,7 @@ const recipesData: Recipe[] = [
       "Skew and grill at 220°C (425°F) for 15 minutes until edges are charred.",
       "Sprinkle Chaat Masala and fresh coriander; serve immediately with mint chutney.",
     ],
-    spiceKitPrice: 11.99,
+    spiceKitPrice: 299,
   },
   {
     name: "Kerala Black Pepper Prawn Roast",
@@ -111,7 +111,7 @@ const recipesData: Recipe[] = [
       "Toss prawns with turmeric and chili powder; saute for 4 minutes.",
       "Finish with freshly cracked black pepper and toasted coconut flakes.",
     ],
-    spiceKitPrice: 12.99,
+    spiceKitPrice: 349,
   },
 ];
 
@@ -532,7 +532,7 @@ export default function Recipes() {
                 className="btn-primary"
                 style={{ fontSize: "0.75rem" }}
               >
-                Add Spice Kit — ${selectedRecipe.spiceKitPrice.toFixed(2)}
+                Add Spice Kit — ₹{selectedRecipe.spiceKitPrice}
               </button>
             </div>
           </div>
