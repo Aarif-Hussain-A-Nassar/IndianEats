@@ -77,7 +77,7 @@ export default function Hero() {
           zIndex: 0,
         }}
       >
-        <LogoMark size={70} color="var(--terracotta)" />
+        <LogoMark size={70} color="var(--terracotta)" bgColor="var(--cream)" />
       </span>
 
       {[

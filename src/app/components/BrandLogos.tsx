@@ -3,213 +3,225 @@ import React from "react";
 interface LogoProps {
   className?: string;
   size?: number;
-  color?: string; // e.g. "currentColor", "var(--terracotta)", etc.
+  color?: string;
+  bgColor?: string;
 }
 
-// 1. LogoMark: The vertical decorative oval with curves and star anise in the center
+/**
+ * LogoMark — The oval badge with decorative diamond + flower center.
+ * Faithfully recreated from the brand reference image.
+ * bgColor fills the oval background; color is used for all ornamental strokes/fills.
+ */
 export const LogoMark: React.FC<LogoProps> = ({
   className = "",
   size = 120,
-  color = "currentColor",
+  color = "#FEF4B9",
+  bgColor = "transparent",
 }) => {
-  // Height is scaled with width (ratio 160:220)
-  const height = (size * 220) / 160;
+  const h = (size * 280) / 200;
 
   return (
     <svg
       width={size}
-      height={height}
-      viewBox="0 0 160 220"
+      height={h}
+      viewBox="0 0 200 280"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      style={{ display: "inline-block", verticalAlign: "middle" }}
+      style={{ display: "inline-block", verticalAlign: "middle", flexShrink: 0 }}
     >
-      {/* Outer solid oval */}
-      <ellipse
-        cx="80"
-        cy="110"
-        rx="72"
-        ry="102"
-        stroke={color}
-        strokeWidth="3.5"
-        fill="none"
-      />
+      {/* ── Filled oval background ── */}
+      <ellipse cx="100" cy="140" rx="90" ry="128" fill={bgColor === "transparent" ? "none" : bgColor} />
 
-      {/* Inner solid thin oval */}
-      <ellipse
-        cx="80"
-        cy="110"
-        rx="64"
-        ry="94"
-        stroke={color}
-        strokeWidth="1.5"
-        fill="none"
-      />
+      {/* ── Outer oval border ── */}
+      <ellipse cx="100" cy="140" rx="90" ry="128" stroke={color} strokeWidth="4" fill="none" />
 
-      {/* Traditional Indian corner/side scrolls (motifs) */}
-      {/* Top ornamental scrolls */}
-      <path
-        d="M 50 38 C 50 30, 80 20, 80 32 C 80 20, 110 30, 110 38"
-        stroke={color}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d="M 60 48 C 65 38, 80 34, 80 38 C 80 34, 95 38, 100 48"
-        stroke={color}
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        fill="none"
-      />
+      {/* ── Inner oval border ── */}
+      <ellipse cx="100" cy="140" rx="79" ry="117" stroke={color} strokeWidth="1.8" fill="none" />
 
-      {/* Bottom ornamental scrolls */}
+      {/* ── TOP SCROLL ORNAMENT ── */}
+      {/* Main arch */}
       <path
-        d="M 50 182 C 50 190, 80 200, 80 188 C 80 200, 110 190, 110 182"
-        stroke={color}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        fill="none"
+        d="M 68 34 Q 100 12 132 34"
+        stroke={color} strokeWidth="2.8" strokeLinecap="round" fill="none"
+      />
+      {/* Inner smaller arch */}
+      <path
+        d="M 78 42 Q 100 26 122 42"
+        stroke={color} strokeWidth="1.6" strokeLinecap="round" fill="none"
+      />
+      {/* Left curl */}
+      <path
+        d="M 68 34 Q 60 28 62 22 Q 64 16 70 20"
+        stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none"
+      />
+      {/* Right curl */}
+      <path
+        d="M 132 34 Q 140 28 138 22 Q 136 16 130 20"
+        stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none"
+      />
+      {/* Center top dot */}
+      <circle cx="100" cy="14" r="3" fill={color} />
+      {/* Side dots on top scroll */}
+      <circle cx="63" cy="21" r="2.2" fill={color} />
+      <circle cx="137" cy="21" r="2.2" fill={color} />
+
+      {/* ── BOTTOM SCROLL ORNAMENT ── */}
+      <path
+        d="M 68 246 Q 100 268 132 246"
+        stroke={color} strokeWidth="2.8" strokeLinecap="round" fill="none"
       />
       <path
-        d="M 60 172 C 65 182, 80 186, 80 182 C 80 186, 95 182, 100 172"
-        stroke={color}
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        fill="none"
+        d="M 78 238 Q 100 254 122 238"
+        stroke={color} strokeWidth="1.6" strokeLinecap="round" fill="none"
       />
-
-      {/* Center diamond outline with soft curve-points */}
       <path
-        d="M 80 50 L 132 110 L 80 170 L 28 110 Z"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinejoin="round"
-        fill="none"
+        d="M 68 246 Q 60 252 62 258 Q 64 264 70 260"
+        stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none"
+      />
+      <path
+        d="M 132 246 Q 140 252 138 258 Q 136 264 130 260"
+        stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none"
+      />
+      <circle cx="100" cy="266" r="3" fill={color} />
+      <circle cx="63" cy="259" r="2.2" fill={color} />
+      <circle cx="137" cy="259" r="2.2" fill={color} />
+
+      {/* ── CENTER DIAMOND ── */}
+      <path
+        d="M 100 56 L 162 140 L 100 224 L 38 140 Z"
+        stroke={color} strokeWidth="2.5" strokeLinejoin="round" fill="none"
       />
 
-      {/* Scroll flourishes attached to the diamond corners */}
-      {/* Top corner scroll */}
-      <path d="M 80 50 Q 80 44 84 44 Q 88 44 88 48" stroke={color} strokeWidth="1.5" fill="none" />
-      <path d="M 80 50 Q 80 44 76 44 Q 72 44 72 48" stroke={color} strokeWidth="1.5" fill="none" />
-      
-      {/* Bottom corner scroll */}
-      <path d="M 80 170 Q 80 176 84 176 Q 88 176 88 172" stroke={color} strokeWidth="1.5" fill="none" />
-      <path d="M 80 170 Q 80 176 76 176 Q 72 176 72 172" stroke={color} strokeWidth="1.5" fill="none" />
+      {/* Diamond tip curls — TOP */}
+      <path d="M 100 56 Q 96 48 90 50 Q 85 52 88 58" stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      <path d="M 100 56 Q 104 48 110 50 Q 115 52 112 58" stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" />
 
-      {/* Side flourishes */}
-      <path d="M 28 110 Q 22 106 22 102 Q 22 98 26 98" stroke={color} strokeWidth="1.5" fill="none" />
-      <path d="M 28 110 Q 22 114 22 118 Q 22 122 26 122" stroke={color} strokeWidth="1.5" fill="none" />
-      
-      <path d="M 132 110 Q 138 106 138 102 Q 138 98 134 98" stroke={color} strokeWidth="1.5" fill="none" />
-      <path d="M 132 110 Q 138 114 138 118 Q 138 122 134 122" stroke={color} strokeWidth="1.5" fill="none" />
+      {/* Diamond tip curls — BOTTOM */}
+      <path d="M 100 224 Q 96 232 90 230 Q 85 228 88 222" stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      <path d="M 100 224 Q 104 232 110 230 Q 115 228 112 222" stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" />
 
-      {/* Inside-diamond corner accent dots */}
-      <circle cx="80" cy="66" r="3" fill={color} />
-      <circle cx="80" cy="154" r="3" fill={color} />
-      <circle cx="44" cy="110" r="3" fill={color} />
-      <circle cx="116" cy="110" r="3" fill={color} />
+      {/* Diamond tip curls — LEFT */}
+      <path d="M 38 140 Q 30 136 28 130 Q 26 124 32 122" stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      <path d="M 38 140 Q 30 144 28 150 Q 26 156 32 158" stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" />
 
-      {/* Center 8-petal Star Anise (Flower Spice) */}
-      <g transform="translate(80, 110)">
+      {/* Diamond tip curls — RIGHT */}
+      <path d="M 162 140 Q 170 136 172 130 Q 174 124 168 122" stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      <path d="M 162 140 Q 170 144 172 150 Q 174 156 168 158" stroke={color} strokeWidth="1.5" strokeLinecap="round" fill="none" />
+
+      {/* ── LEAF / PETAL clusters on diamond sides ── */}
+      {/* Left side leaves */}
+      <path d="M 62 118 Q 50 110 55 100 Q 65 108 62 118 Z" fill={color} opacity="0.9" />
+      <path d="M 62 162 Q 50 170 55 180 Q 65 172 62 162 Z" fill={color} opacity="0.9" />
+      {/* Right side leaves */}
+      <path d="M 138 118 Q 150 110 145 100 Q 135 108 138 118 Z" fill={color} opacity="0.9" />
+      <path d="M 138 162 Q 150 170 145 180 Q 135 172 138 162 Z" fill={color} opacity="0.9" />
+
+      {/* Leaf stems */}
+      <path d="M 62 118 L 75 128" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M 62 162 L 75 152" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M 138 118 L 125 128" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M 138 162 L 125 152" stroke={color} strokeWidth="1.2" strokeLinecap="round" />
+
+      {/* ── CENTER 8-PETAL FLOWER ── */}
+      <g transform="translate(100, 140)">
+        {/* 8 petals at 45° intervals */}
         {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
           <path
             key={angle}
-            d="M 0 0 C -4 -16, 0 -25, 0 -25 C 0 -25, 4 -16, 0 0"
+            d="M 0 0 C -9 -22 -5 -38 0 -40 C 5 -38 9 -22 0 0"
             fill={color}
+            opacity="0.95"
             transform={`rotate(${angle})`}
           />
         ))}
-        {/* Star anise center core */}
-        <circle cx="0" cy="0" r="4.5" fill="var(--cream, #FEF4B9)" stroke={color} strokeWidth="1.5" />
+        {/* Ring between petals and center */}
+        <circle cx="0" cy="0" r="13" fill={bgColor === "transparent" ? "none" : bgColor} stroke={color} strokeWidth="1.8" />
+        {/* Center dot */}
+        <circle cx="0" cy="0" r="5" fill={color} />
+        {/* 8 tiny dots around ring */}
+        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
+          const rad = (angle * Math.PI) / 180;
+          return (
+            <circle
+              key={angle}
+              cx={13 * Math.sin(rad)}
+              cy={-13 * Math.cos(rad)}
+              r="1.8"
+              fill={color}
+            />
+          );
+        })}
       </g>
+
+      {/* ── Diamond accent dots at 4 corners ── */}
+      <circle cx="100" cy="72" r="3.5" fill={color} />
+      <circle cx="100" cy="208" r="3.5" fill={color} />
+      <circle cx="54" cy="140" r="3.5" fill={color} />
+      <circle cx="146" cy="140" r="3.5" fill={color} />
     </svg>
   );
 };
 
-// 2. LogoIE: Oval with "IE" letters inside, in secondary logo style
+/**
+ * LogoIE — The secondary oval badge with "IE" monogram.
+ * Matches the secondary logo from the brand reference image.
+ */
 export const LogoIE: React.FC<LogoProps> = ({
   className = "",
   size = 120,
-  color = "currentColor",
+  color = "#FEF4B9",
+  bgColor = "transparent",
 }) => {
-  const height = (size * 220) / 160;
+  const h = (size * 280) / 200;
 
   return (
     <svg
       width={size}
-      height={height}
-      viewBox="0 0 160 220"
+      height={h}
+      viewBox="0 0 200 280"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      style={{ display: "inline-block", verticalAlign: "middle" }}
+      style={{ display: "inline-block", verticalAlign: "middle", flexShrink: 0 }}
     >
-      {/* Outer solid oval */}
-      <ellipse
-        cx="80"
-        cy="110"
-        rx="72"
-        ry="102"
-        stroke={color}
-        strokeWidth="3.5"
-        fill="none"
-      />
+      {/* Filled oval background */}
+      <ellipse cx="100" cy="140" rx="90" ry="128" fill={bgColor === "transparent" ? "none" : bgColor} />
 
-      {/* Inner solid thin oval */}
-      <ellipse
-        cx="80"
-        cy="110"
-        rx="64"
-        ry="94"
-        stroke={color}
-        strokeWidth="1.5"
-        fill="none"
-      />
+      {/* Outer oval */}
+      <ellipse cx="100" cy="140" rx="90" ry="128" stroke={color} strokeWidth="4" fill="none" />
 
-      {/* Top ornamental scrolls */}
-      <path
-        d="M 50 38 C 50 30, 80 20, 80 32 C 80 20, 110 30, 110 38"
-        stroke={color}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d="M 60 48 C 65 38, 80 34, 80 38 C 80 34, 95 38, 100 48"
-        stroke={color}
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        fill="none"
-      />
+      {/* Inner oval */}
+      <ellipse cx="100" cy="140" rx="79" ry="117" stroke={color} strokeWidth="1.8" fill="none" />
 
-      {/* Bottom ornamental scrolls */}
-      <path
-        d="M 50 182 C 50 190, 80 200, 80 188 C 80 200, 110 190, 110 182"
-        stroke={color}
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        fill="none"
-      />
-      <path
-        d="M 60 172 C 65 182, 80 186, 80 182 C 80 186, 95 182, 100 172"
-        stroke={color}
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        fill="none"
-      />
+      {/* Top scroll */}
+      <path d="M 68 34 Q 100 12 132 34" stroke={color} strokeWidth="2.8" strokeLinecap="round" fill="none" />
+      <path d="M 78 42 Q 100 26 122 42" stroke={color} strokeWidth="1.6" strokeLinecap="round" fill="none" />
+      <path d="M 68 34 Q 60 28 62 22 Q 64 16 70 20" stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none" />
+      <path d="M 132 34 Q 140 28 138 22 Q 136 16 130 20" stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none" />
+      <circle cx="100" cy="14" r="3" fill={color} />
+      <circle cx="63" cy="21" r="2.2" fill={color} />
+      <circle cx="137" cy="21" r="2.2" fill={color} />
 
-      {/* Custom styled Serif Letters "IE" in the center */}
+      {/* Bottom scroll */}
+      <path d="M 68 246 Q 100 268 132 246" stroke={color} strokeWidth="2.8" strokeLinecap="round" fill="none" />
+      <path d="M 78 238 Q 100 254 122 238" stroke={color} strokeWidth="1.6" strokeLinecap="round" fill="none" />
+      <path d="M 68 246 Q 60 252 62 258 Q 64 264 70 260" stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none" />
+      <path d="M 132 246 Q 140 252 138 258 Q 136 264 130 260" stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none" />
+      <circle cx="100" cy="266" r="3" fill={color} />
+      <circle cx="63" cy="259" r="2.2" fill={color} />
+      <circle cx="137" cy="259" r="2.2" fill={color} />
+
+      {/* "IE" serif monogram */}
       <text
-        x="80"
-        y="126"
+        x="100"
+        y="166"
         fill={color}
-        fontFamily="var(--font-playfair), 'Playfair Display', 'Fraunces', serif"
-        fontSize="54"
-        fontWeight="800"
+        fontFamily="'Playfair Display', 'Georgia', serif"
+        fontSize="96"
+        fontWeight="700"
         textAnchor="middle"
-        letterSpacing="-3"
+        letterSpacing="-6"
         style={{ userSelect: "none" }}
       >
         IE
@@ -218,7 +230,68 @@ export const LogoIE: React.FC<LogoProps> = ({
   );
 };
 
-// 3. LogoFull: Full stacked or horizontal brand logo with vintage flared serif text
+/**
+ * LogoPrimaryText — The "INDIAN EATS" text-only wordmark in vintage display style.
+ * Rendered as bold stacked text using the brand font, mimicking the hand-lettered look.
+ */
+interface LogoPrimaryTextProps {
+  className?: string;
+  color?: string;
+  fontSize?: number;
+}
+
+export const LogoPrimaryText: React.FC<LogoPrimaryTextProps> = ({
+  className = "",
+  color = "#FEF4B9",
+  fontSize = 60,
+}) => {
+  const lineH = fontSize * 0.95;
+  const w = fontSize * 3.6;
+  const h = lineH * 2 + 12;
+
+  return (
+    <svg
+      width={w}
+      height={h}
+      viewBox={`0 0 ${w} ${h}`}
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      style={{ display: "inline-block" }}
+    >
+      <text
+        x={w / 2}
+        y={lineH}
+        fill={color}
+        fontFamily="'Playfair Display', 'Georgia', serif"
+        fontSize={fontSize}
+        fontWeight="900"
+        textAnchor="middle"
+        letterSpacing="2"
+        style={{ userSelect: "none" }}
+      >
+        INDIAN
+      </text>
+      <text
+        x={w / 2}
+        y={lineH * 2 + 4}
+        fill={color}
+        fontFamily="'Playfair Display', 'Georgia', serif"
+        fontSize={fontSize}
+        fontWeight="900"
+        textAnchor="middle"
+        letterSpacing="2"
+        style={{ userSelect: "none" }}
+      >
+        EATS
+      </text>
+    </svg>
+  );
+};
+
+/**
+ * LogoFull — Composed logo: LogoMark badge + wordmark text side-by-side (horizontal)
+ * or stacked (vertical). Used in Navbar, Hero, etc.
+ */
 interface LogoFullProps extends LogoProps {
   layout?: "horizontal" | "vertical" | "centered-badge";
   logoSize?: number;
@@ -228,161 +301,91 @@ export const LogoFull: React.FC<LogoFullProps> = ({
   className = "",
   layout = "horizontal",
   logoSize = 42,
-  color = "var(--terracotta)",
+  color = "#FEF4B9",
+  bgColor = "transparent",
 }) => {
   if (layout === "vertical") {
     return (
       <div
-        className={`flex flex-col items-center text-center ${className}`}
-        style={{ gap: "10px" }}
+        className={className}
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}
       >
-        <LogoMark size={logoSize} color={color} />
-        <div className="flex flex-col items-center">
-          <span
-            style={{
-              fontFamily: "var(--font-playfair), serif",
-              fontSize: "1.9rem",
-              fontWeight: 800,
-              color: color,
-              lineHeight: 0.95,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              display: "block",
-            }}
-          >
-            INDIAN
-          </span>
-          <span
-            style={{
-              fontFamily: "var(--font-playfair), serif",
-              fontSize: "1.9rem",
-              fontWeight: 800,
-              color: color,
-              lineHeight: 0.95,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              display: "block",
-            }}
-          >
-            EATS
-          </span>
+        <LogoMark size={logoSize} color={color} bgColor={bgColor} />
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          {["INDIAN", "EATS"].map((word) => (
+            <span
+              key={word}
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "1.9rem",
+                fontWeight: 900,
+                color,
+                lineHeight: 0.95,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+              }}
+            >
+              {word}
+            </span>
+          ))}
         </div>
       </div>
     );
   }
 
   if (layout === "centered-badge") {
-    // Exactly matches the first image layout:
-    // Logo mark in center, flanked by "ES TD" "20 26", and "INDIAN EATS" underneath
     return (
       <div
-        className={`flex flex-col items-center text-center ${className}`}
-        style={{ gap: "12px" }}
+        className={className}
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}
       >
-        <div className="flex items-center justify-center gap-6 relative">
-          <div
-            style={{
-              fontFamily: "var(--font-lato), sans-serif",
-              fontSize: "0.78rem",
-              fontWeight: 700,
-              letterSpacing: "0.15em",
-              color: "var(--sage-dark)",
-              textTransform: "uppercase",
-              lineHeight: 1.1,
-              textAlign: "right",
-            }}
-          >
-            ES
-            <br />
-            TD
-          </div>
-
-          <LogoMark size={64} color="var(--gold)" />
-
-          <div
-            style={{
-              fontFamily: "var(--font-lato), sans-serif",
-              fontSize: "0.78rem",
-              fontWeight: 700,
-              letterSpacing: "0.15em",
-              color: "var(--sage-dark)",
-              textTransform: "uppercase",
-              lineHeight: 1.1,
-              textAlign: "left",
-            }}
-          >
-            20
-            <br />
-            26
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center mt-1">
-          <h1
-            style={{
-              fontFamily: "var(--font-playfair), serif",
-              fontSize: "2.8rem",
-              fontWeight: 800,
-              color: color,
-              lineHeight: 0.85,
-              letterSpacing: "0.02em",
-              textTransform: "uppercase",
-            }}
-          >
-            INDIAN
-          </h1>
-          <h1
-            style={{
-              fontFamily: "var(--font-playfair), serif",
-              fontSize: "2.8rem",
-              fontWeight: 800,
-              color: color,
-              lineHeight: 0.95,
-              letterSpacing: "0.04em",
-              textTransform: "uppercase",
-            }}
-          >
-            EATS
-          </h1>
+        <LogoMark size={logoSize} color={color} bgColor={bgColor} />
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          {["INDIAN", "EATS"].map((word) => (
+            <span
+              key={word}
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "2.6rem",
+                fontWeight: 900,
+                color,
+                lineHeight: 0.9,
+                letterSpacing: "0.05em",
+                textTransform: "uppercase",
+              }}
+            >
+              {word}
+            </span>
+          ))}
         </div>
       </div>
     );
   }
 
-  // Default: horizontal layout (ideal for standard navbar)
+  // Horizontal (default — used in Navbar)
   return (
     <div
-      className={`flex items-center gap-3.5 ${className}`}
-      style={{ textDecoration: "none" }}
+      className={className}
+      style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
     >
-      <LogoMark size={logoSize} color="var(--gold)" />
-      <div className="flex flex-col justify-center">
-        <span
-          style={{
-            fontFamily: "var(--font-playfair), serif",
-            fontSize: "1.45rem",
-            fontWeight: 800,
-            color: color,
-            lineHeight: 0.9,
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-          }}
-        >
-          INDIAN
-        </span>
-        <span
-          style={{
-            fontFamily: "var(--font-playfair), serif",
-            fontSize: "1.45rem",
-            fontWeight: 800,
-            color: color,
-            lineHeight: 1,
-            letterSpacing: "0.05em",
-            textTransform: "uppercase",
-          }}
-        >
-          EATS
-        </span>
+      <LogoMark size={logoSize} color={color} bgColor={bgColor} />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {["INDIAN", "EATS"].map((word, i) => (
+          <span
+            key={word}
+            style={{
+              fontFamily: "'Playfair Display', serif",
+              fontSize: logoSize * 0.38 + "px",
+              fontWeight: 900,
+              color,
+              lineHeight: i === 0 ? 1.05 : 0.95,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+            }}
+          >
+            {word}
+          </span>
+        ))}
       </div>
     </div>
   );

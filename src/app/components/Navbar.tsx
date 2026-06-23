@@ -134,45 +134,50 @@ export default function Navbar() {
             <Link
               href="/"
               aria-label="Indian Eats Home"
-              style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", flexShrink: 0 }}
+              style={{ display: "flex", alignItems: "center", gap: "12px", textDecoration: "none", flexShrink: 0 }}
               className="nav-logo-link"
             >
+              {/* Actual brand oval badge mark */}
               <div
                 style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "10px",
-                  background: "linear-gradient(135deg, var(--terracotta), var(--gold))",
+                  width: "42px",
+                  height: "42px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(145deg, var(--terracotta) 0%, #d44a08 100%)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: "0 2px 12px rgba(246,99,30,0.4)",
+                  boxShadow: "0 2px 14px rgba(246,99,30,0.45), inset 0 1px 0 rgba(255,255,255,0.15)",
                   flexShrink: 0,
+                  overflow: "hidden",
+                  padding: "4px",
                 }}
               >
-                <LogoMark size={22} color="#fff" />
+                <LogoMark size={32} color="#FEF4B9" bgColor="transparent" />
               </div>
               <div style={{ lineHeight: 1.1 }}>
                 <p
                   style={{
-                    fontFamily: "var(--font-playfair)",
-                    fontSize: "0.95rem",
-                    fontWeight: 800,
+                    fontFamily: "'Playfair Display', var(--font-playfair), serif",
+                    fontSize: "1rem",
+                    fontWeight: 900,
                     color: "#ffffff",
-                    letterSpacing: "0.04em",
+                    letterSpacing: "0.06em",
                     lineHeight: 1,
+                    textTransform: "uppercase",
                   }}
                 >
                   INDIAN
                 </p>
                 <p
                   style={{
-                    fontFamily: "var(--font-playfair)",
-                    fontSize: "0.7rem",
-                    fontWeight: 700,
+                    fontFamily: "'Playfair Display', var(--font-playfair), serif",
+                    fontSize: "0.75rem",
+                    fontWeight: 800,
                     color: "var(--gold)",
-                    letterSpacing: "0.18em",
+                    letterSpacing: "0.22em",
                     lineHeight: 1,
+                    textTransform: "uppercase",
                   }}
                 >
                   EATS
@@ -560,15 +565,18 @@ export default function Navbar() {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <div style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "8px",
-                  background: "linear-gradient(135deg, var(--terracotta), var(--gold))",
+                  width: "34px",
+                  height: "34px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(145deg, var(--terracotta) 0%, #d44a08 100%)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  boxShadow: "0 2px 10px rgba(246,99,30,0.4)",
+                  padding: "3px",
+                  flexShrink: 0,
                 }}>
-                  <LogoMark size={18} color="#fff" />
+                  <LogoMark size={24} color="#FEF4B9" bgColor="transparent" />
                 </div>
                 <h2 style={{ fontFamily: "var(--font-playfair)", fontSize: "1.3rem", fontWeight: 800, color: "#fff" }}>
                   Your Spice Bag

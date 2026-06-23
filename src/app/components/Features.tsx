@@ -46,7 +46,7 @@ export default function Features() {
           pointerEvents: "none",
         }}
       >
-        <LogoMark size={280} color="var(--cream)" />
+        <LogoMark size={280} color="var(--cream)" bgColor="transparent" />
       </span>
 
       <div className="container">

@@ -48,7 +48,7 @@ export default function Newsletter() {
               pointerEvents: "none",
             }}
           >
-            <LogoMark size={90} color="var(--cream)" />
+            <LogoMark size={90} color="var(--cream)" bgColor="transparent" />
           </span>
           <span
             aria-hidden="true"
@@ -62,7 +62,7 @@ export default function Newsletter() {
               pointerEvents: "none",
             }}
           >
-            <LogoMark size={110} color="var(--cream)" />
+            <LogoMark size={110} color="var(--cream)" bgColor="transparent" />
           </span>
 
           {["🌿", "🌶️"].map((e, i) => (
