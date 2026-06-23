@@ -270,10 +270,13 @@ export default function Spices() {
         </div>
 
         {/* ── PART 2: Signature Single estates ── */}
-        <div className="fade-up">
+        <div id="products" className="fade-up" style={{ scrollMarginTop: "90px" }}>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
+            <span className="section-tag" style={{ color: "var(--terracotta)", fontWeight: 800 }}>
+              Single-Origin Estates
+            </span>
             <h3 style={{ fontFamily: "var(--font-playfair)", fontSize: "1.8rem", fontWeight: 800, color: "var(--brown-dark)" }}>
-              Or Shop Single-Origin Estates
+              Our Products
             </h3>
             <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", marginTop: "4px" }}>
               Unblended, raw spice elements, sourced directly from single geographic properties.

@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   title: "Indian Eats – Authentic Indian Recipes & Spices",
   description:
     "Explore the rich world of Indian cuisine — discover authentic recipes, hand-picked spices, and culinary traditions from across India.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
